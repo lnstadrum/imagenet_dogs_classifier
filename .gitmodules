@@ -1,0 +1,9 @@
+[submodule "beatmup"]
+	path = beatmup
+	url = https://github.com/lnstadrum/beatmup.git
+[submodule "fastaugment"]
+	path = fastaugment
+	url = https://github.com/lnstadrum/fastaugment.git
+[submodule "sigmoid_like_tf_op"]
+	path = sigmoid_like_tf_op
+	url = https://github.com/lnstadrum/sigmoid_like_tf_op.git
