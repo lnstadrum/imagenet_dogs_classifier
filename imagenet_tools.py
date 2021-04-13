@@ -1,5 +1,6 @@
 import numpy
 import os
+import random
 import re
 import tensorflow as tf
 import xml.etree.ElementTree as et
@@ -7,6 +8,11 @@ from glob import iglob
 
 
 class ImageSet(tf.keras.utils.Sequence):
+    """ Set of images in ImageNet 2012 dataset: searches for images following ImageNet organization and parses annotations.
+        Implements sampling and filtering to a set of classes.
+        Can act as a dataset for training/validation (implements tf.keras.utils.Sequence).
+        Implements conversion to TF record files.
+    """
     def __init__(self, path_annotations, path_images, path_cache=None, batch_size=1, image_size=224, length=None, use_annotations=True):
         self.batch_size = batch_size
         self.image_size = image_size
@@ -64,14 +70,14 @@ class ImageSet(tf.keras.utils.Sequence):
                         assert area > 0, "Negative bounding box area got"
                         if area > max_area:
                             max_area = area
-                            bestObj = obj
+                            best_obj = obj
 
                     # get its synset
-                    synset = bestObj.find('name').text[1:]
+                    synset = best_obj.find('name').text[1:]
 
                     # get its center
                     if use_annotations:
-                        bbox = bestObj.find('bndbox')
+                        bbox = best_obj.find('bndbox')
                         x, y = (int(bbox.find('xmin').text) + int(bbox.find('xmax').text)) // 2, (int(bbox.find('ymin').text) + int(bbox.find('ymax').text)) // 2
                         size = xml.find('size')
                         x /= float(size.find('width').text)
@@ -141,7 +147,6 @@ class ImageSet(tf.keras.utils.Sequence):
 
 
     def shuffle(self):
-        import random
         random.shuffle(self.list)
 
 
@@ -185,7 +190,7 @@ class ImageSet(tf.keras.utils.Sequence):
             i = (i + 1) % len(self.list)
 
 
-    def numClasses(self):
+    def num_classes(self):
         return len(self.synset_map)
 
 
@@ -222,7 +227,7 @@ class ImageSet(tf.keras.utils.Sequence):
             image = self._load(j)
             batch.append(image)
             labels.append(self.get_class_idx(j))
-        return tf.concat(batch, 0), tf.one_hot(labels, self.numClasses())
+        return tf.concat(batch, 0), tf.one_hot(labels, self.num_classes())
 
 
     def __len__(self):
@@ -230,8 +235,7 @@ class ImageSet(tf.keras.utils.Sequence):
 
 
     def on_epoch_end(self):
-        import random
-        random.shuffle(self.list)
+        self.shuffle()
 
 
     def make_tfrecord(self, fname_pattern, num_files):

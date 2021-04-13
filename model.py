@@ -73,6 +73,8 @@ def downsmp_unit(x, name, depth, size=3):
 
 
 def make_model(input_size, num_classes=120):
+    """ Returns a keras model instance.
+    """
     input = Input(shape=(input_size, input_size, 3), name='input')
     x = input
     
