@@ -1,6 +1,8 @@
 ## Overview
 
-This repository contains scripts to train a small neural net classifying images of dogs detailed here: [Towards GPU-accelerated image classification on low-end hardware](https://lnstadrum.medium.com/towards-gpu-accelerated-image-classification-on-low-end-hardware-ec592e125ad9)
+This repository contains scripts to train a small neural net classifying images of dogs detailed here:
+
+[Towards GPU-accelerated image classification on low-end hardware](https://lnstadrum.medium.com/towards-gpu-accelerated-image-classification-on-low-end-hardware-ec592e125ad9?source=friends_link&sk=58522d9ba67ae5ce2d1cbee6d0791dc5)
 
 The model of 216'152 trainable parameters achieves **72.28%** top-1 single crop validation accuracy on 385*385 pixels images of dogs and cats sampled from a challenging 120-class subset of ILSVRC 2012 dataset.
 
